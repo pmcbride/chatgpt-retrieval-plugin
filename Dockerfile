@@ -1,3 +1,4 @@
+
 FROM python:3.10 as requirements-stage
 
 WORKDIR /tmp
@@ -6,11 +7,8 @@ RUN pip install poetry
 
 COPY ./pyproject.toml ./poetry.lock* /tmp/
 
+
 RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
-
-FROM redis/redis-stack:latest as redis-stage
-
-EXPOSE 6379 8001
 
 FROM python:3.10
 

@@ -26,8 +26,7 @@ PyPDF2 = "^3.0.1"
 python-pptx = "^0.6.21"
 python-multipart = "^0.0.6"
 arrow = "^1.2.3"
-redis = "4.5.4"
-llama-index = "0.5.4"
+chromadb = "^0.3.25"
 loguru = "^0.7.0"
 elasticsearch = "8.8.2"
 
@@ -36,6 +35,7 @@ start = "server.main:start"
 dev = "local_server.main:start"
 
 [tool.poetry.extras]
+postgresql = ["psycopg2cffi"]
 
 [tool.poetry.group.dev.dependencies]
 httpx = "^0.23.3"
