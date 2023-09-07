@@ -137,6 +137,41 @@ components:
         author:
           title: Author
           type: string
+        chat_metadata:
+          $ref: "#/components/schemas/ChatMetadata"
+    ChatMetadata:
+      title: ChatMetadata
+      type: object
+      properties:
+        conversation_id:
+          type: string
+          description: The unique identifier for the conversation
+        message_id:
+          type: string
+          description: The unique identifier for the message within the conversation
+        author_role:
+          type: string
+          description: The role of the author (e.g., 'user', 'assistant')
+        create_time:
+          type: string
+          description: The timestamp when the message was created
+        update_time:
+          type: string
+          description: The timestamp when the message was last updated
+        subject:
+          type: string
+          description: The subject or topic of the conversation
+        keywords:
+          type: array
+          items:
+            type: string
+          description: Keywords for easier search and retrieval
+        status:
+          type: string
+          description: The status of the message (e.g., 'finished_successfully')
+        extra_metadata:
+          type: object
+          description: Any additional metadata
     DocumentMetadataFilter:
       title: DocumentMetadataFilter
       type: object

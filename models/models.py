@@ -1,5 +1,5 @@
-from pydantic import BaseModel
-from typing import List, Optional
+from pydantic import BaseModel, Field
+from typing import List, Optional, Union, Dict
 from enum import Enum
 
 
@@ -9,12 +9,45 @@ class Source(str, Enum):
     chat = "chat"
 
 
+class ChatMetadata(BaseModel):
+    """
+    Metadata specific to chat conversations.
+    """
+
+    conversation_id: str = Field(..., description="The unique identifier for the conversation")
+    message_id: str = Field(
+        ..., description="The unique identifier for the message within the conversation"
+    )
+    author_role: str = Field(..., description="The role of the author (e.g., 'user', 'assistant')")
+    create_time: str = Field(..., description="The timestamp when the message was created")
+    update_time: Optional[str] = Field(
+        None, description="The timestamp when the message was last updated"
+    )
+    subject: Optional[str] = Field(None, description="The subject or topic of the conversation")
+    keywords: Optional[List[str]] = Field(
+        None, description="Keywords for easier search and retrieval"
+    )
+    status: Optional[str] = Field(
+        None, description="The status of the message (e.g., 'finished_successfully')"
+    )
+    extra_metadata: Optional[Dict] = Field(None, description="Any additional metadata")
+
+
 class DocumentMetadata(BaseModel):
-    source: Optional[Source] = None
-    source_id: Optional[str] = None
-    url: Optional[str] = None
-    created_at: Optional[str] = None
-    author: Optional[str] = None
+    """
+    Metadata associated with a document.
+    """
+
+    source: str = Field(
+        ..., description="The source of the document, e.g., 'email', 'file', 'chat'"
+    )
+    source_id: Optional[str] = Field(None, description="Unique identifier for the source")
+    url: Optional[str] = Field(None, description="URL related to the document, if applicable")
+    created_at: Optional[str] = Field(None, description="Timestamp when the document was created")
+    author: Optional[str] = Field(None, description="The author of the document, if applicable")
+    chat_metadata: Optional[ChatMetadata] = Field(
+        None, description="Additional metadata specific to chat conversations"
+    )
 
 
 class DocumentChunkMetadata(DocumentMetadata):
@@ -33,9 +66,13 @@ class DocumentChunkWithScore(DocumentChunk):
 
 
 class Document(BaseModel):
-    id: Optional[str] = None
-    text: str
-    metadata: Optional[DocumentMetadata] = None
+    """
+    Represents a document to be upserted into the database.
+    """
+
+    id: Optional[str] = Field(None, description="Unique identifier for the document")
+    text: str = Field(..., description="The text content of the document")
+    metadata: DocumentMetadata = Field(..., description="Metadata associated with the document")
 
 
 class DocumentWithChunks(Document):
