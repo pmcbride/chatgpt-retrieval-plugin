@@ -34,28 +34,24 @@ assert BEARER_TOKEN is not None
 # import quart_cors
 # from quart import request, jsonify
 from simpleaichat import AIChat
-from tools import load_tools
+from server.tools import load_tools
 from typing import Any, Dict, List, Optional, Union
 
 import json
 import pprint as pp
 from pprint import PrettyPrinter, pprint, pformat
+
 pprint = pp.PrettyPrinter(sort_dicts=False).pprint
 pformat = pp.PrettyPrinter(sort_dicts=False).pformat
 
 from rich.console import Console
+
 console = Console()
-TOOL_NAMES = [
-    "search",
-    "lookup"
-]
+TOOL_NAMES = ["search", "lookup"]
 
 TOOLS = load_tools(TOOL_NAMES)
 
-PARAMS = {
-    "temperature": 0.0,
-    "max_tokens": 100
-}
+PARAMS = {"temperature": 0.0, "max_tokens": 100}
 AI_CHAT_ID = "simpleaichat-plugin"
 
 AI = AIChat(params=PARAMS, console=False, id=AI_CHAT_ID)
@@ -65,16 +61,17 @@ print_ai(AI)
 app = quart_cors.cors(quart.Quart(__name__), allow_origin="https://chat.openai.com")
 
 
-@app.route('/chat', methods=['POST'])
+@app.route("/chat", methods=["POST"])
 async def chat():
     global AI
     data = await request.get_json()
-    query = data.get('query')
+    query = data.get("query")
     # Create AIChat instance
     response = AI(query, tools=TOOLS, id=AI_CHAT_ID)
-    console_print(response, title=f"Response: \"{query}\"")
+    console_print(response, title=f'Response: "{query}"')
     print_ai(AI)
-    return jsonify({'response': response})
+    return jsonify({"response": response})
+
 
 def validate_token(credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
     if credentials.scheme != "Bearer" or credentials.credentials != BEARER_TOKEN:
