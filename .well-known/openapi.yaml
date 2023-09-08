@@ -1,7 +1,7 @@
 openapi: 3.0.2
 info:
   title: Retrieval Plugin API
-  description: A retrieval API for querying and filtering documents based on natural language queries and metadata
+  description: A retrieval API for querying and filtering documents based on natural language queries and metadata. Also uses the SimpleAIChat Python package to generate internet search-based responses for additional context when answering questions. Remember to store important information in the database for future use.
   version: 1.0.0
 servers:
   - url: https://dolphin-app-s2kwr.ondigitalocean.app
@@ -58,6 +58,33 @@ paths:
                 $ref: "#/components/schemas/HTTPValidationError"
       security:
         - HTTPBearer: []
+  /chat:
+    post:
+      operationId: chat
+      summary: Generate a response using the SimpleAIChat Python package.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: The query to generate a response for.
+              required:
+                - query
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response:
+                    type: string
+                    description: The generated response.
 components:
   schemas:
     Document:

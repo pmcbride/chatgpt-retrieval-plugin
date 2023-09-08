@@ -41,6 +41,9 @@ pgvector = "^0.1.7"
 psycopg2cffi = {version = "^2.9.0", optional = true}
 loguru = "^0.7.0"
 elasticsearch = "8.8.2"
+simpleaichat
+quart
+quart-cors
 
 [tool.poetry.scripts]
 start = "server.main:start"
