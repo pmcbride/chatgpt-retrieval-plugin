@@ -33,8 +33,13 @@ assert BEARER_TOKEN is not None
 # import quart
 # import quart_cors
 # from quart import request, jsonify
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from simpleaichat import AIChat
-from server.tools import load_tools
+from tools import load_tools
 from typing import Any, Dict, List, Optional, Union
 
 import json
