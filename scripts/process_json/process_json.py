@@ -139,7 +139,8 @@ async def main():
     datastore = await get_datastore()
     # process the json dump
     await process_json_dump(
-        filepath, datastore, custom_metadata, screen_for_pii, extract_metadata
+        filepath, datastore, custom_metadata, False, extract_metadata
+        # filepath, datastore, custom_metadata, screen_for_pii, extract_metadata
     )
 
 

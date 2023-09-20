@@ -144,7 +144,8 @@ async def main():
     datastore = await get_datastore()
     # process the file dump
     await process_file_dump(
-        filepath, datastore, custom_metadata, screen_for_pii, extract_metadata
+        filepath, datastore, custom_metadata, False, extract_metadata
+        # filepath, datastore, custom_metadata, screen_for_pii, extract_metadata
     )
 
 

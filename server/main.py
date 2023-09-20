@@ -32,7 +32,8 @@ assert BEARER_TOKEN is not None
 
 # import quart
 # import quart_cors
-# from quart import request, jsonify
+from quart import request, jsonify
+from fastapi import request, jsonify
 import sys
 import os
 
@@ -60,22 +61,10 @@ PARAMS = {"temperature": 0.0, "max_tokens": 100}
 AI_CHAT_ID = "simpleaichat-plugin"
 
 AI = AIChat(params=PARAMS, console=False, id=AI_CHAT_ID)
-print_ai(AI)
+# print_ai(AI)
 
 # Create a Quart application with CORS enabled
-app = quart_cors.cors(quart.Quart(__name__), allow_origin="https://chat.openai.com")
-
-
-@app.route("/chat", methods=["POST"])
-async def chat():
-    global AI
-    data = await request.get_json()
-    query = data.get("query")
-    # Create AIChat instance
-    response = AI(query, tools=TOOLS, id=AI_CHAT_ID)
-    console_print(response, title=f'Response: "{query}"')
-    print_ai(AI)
-    return jsonify({"response": response})
+# app = quart_cors.cors(quart.Quart(__name__), allow_origin="https://chat.openai.com")
 
 
 def validate_token(credentials: HTTPAuthorizationCredentials = Depends(bearer_scheme)):
@@ -96,6 +85,18 @@ sub_app = FastAPI(
     dependencies=[Depends(validate_token)],
 )
 app.mount("/sub", sub_app)
+
+
+@app.route("/chat", methods=["POST"])
+async def chat():
+    global AI
+    data = await request.get_json()
+    query = data.get("query")
+    # Create AIChat instance
+    response = AI(query, tools=TOOLS, id=AI_CHAT_ID)
+    # console_print(response, title=f'Response: "{query}"')
+    # print_ai(AI)
+    return jsonify({"response": response})
 
 
 @app.post(
